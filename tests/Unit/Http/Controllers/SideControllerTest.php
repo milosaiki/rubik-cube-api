@@ -3,7 +3,6 @@
 namespace Tests\Unit\Http\Controllers;
 
 use App\Http\Controllers\SideController;
-use App\Services\CubeRotationService;
 use App\Services\CubeService;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,7 +15,6 @@ class SideControllerTest extends \Tests\TestCase
 
     private SideController|null $sideController;
     private CubeService|MockObject|null $cubeServiceMock;
-    private CubeRotationService|MockObject|null $cubeRotationServiceMock;
     private Request|MockObject|null $requestMock;
     private ParameterBag|null|MockObject $parameterBagMock;
 
@@ -25,23 +23,20 @@ class SideControllerTest extends \Tests\TestCase
         parent::setUp();
         $this->cubeServiceMock = $this->getMockBuilder(CubeService::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->cubeRotationServiceMock = $this->getMockBuilder(CubeRotationService::class)
-            ->disableOriginalConstructor()
+            ->onlyMethods(['rotateCube'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Request::class)
             ->getMock();
         $this->parameterBagMock = $this->getMockBuilder(ParameterBag::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sideController = new SideController($this->cubeServiceMock, $this->cubeRotationServiceMock);
+        $this->sideController = new SideController($this->cubeServiceMock);
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
         $this->cubeServiceMock = null;
-        $this->cubeRotationServiceMock = null;
         $this->sideController = null;
         $this->requestMock = null;
         $this->parameterBagMock = null;
@@ -49,40 +44,6 @@ class SideControllerTest extends \Tests\TestCase
 
     public function testUpdateWhenRotatingRows()
     {
-        $cube = $this->getCube();
-        $rotatedCube = [
-            'front' => [
-                ['red', 'red', 'red'],
-                ['green', 'green', 'green'],
-                ['green', 'green', 'green'],
-            ],
-            'right' => [
-                ['blue', 'blue', 'blue'],
-                ['red', 'red', 'red'],
-                ['red', 'red', 'red'],
-            ],
-            'back' => [
-                ['orange', 'orange', 'orange'],
-                ['blue', 'blue', 'blue'],
-                ['blue', 'blue', 'blue'],
-            ],
-            'left' => [
-                ['green', 'green', 'green'],
-                ['orange', 'orange', 'orange'],
-                ['orange', 'orange', 'orange'],
-            ],
-            'top' => [
-                ['white', 'white', 'white'],
-                ['white', 'white', 'white'],
-                ['white', 'white', 'white']
-            ],
-            'bottom' => [
-                ['yellow', 'yellow', 'yellow'],
-                ['yellow', 'yellow', 'yellow'],
-                ['yellow', 'yellow', 'yellow'],
-            ]
-        ];
-
         $this->parameterBagMock->expects($this->once())
             ->method('has')
             ->with('row')
@@ -97,15 +58,9 @@ class SideControllerTest extends \Tests\TestCase
             ->willReturn('left');
         $this->requestMock->request = $this->parameterBagMock;
         $this->cubeServiceMock->expects($this->once())
-            ->method('getCube')
-            ->willReturn($cube);
-        $this->cubeRotationServiceMock->expects($this->once())
-            ->method('rotate')
-            ->withAnyParameters()
-            ->willReturn($rotatedCube);
-        $this->cubeServiceMock->expects($this->once())
-            ->method('saveCube')
-            ->with($rotatedCube);
+            ->method('rotateCube')
+            ->withAnyParameters();
+
 
         $result = $this->sideController->update($this->requestMock, 1);
     }
@@ -159,16 +114,10 @@ class SideControllerTest extends \Tests\TestCase
             ->withAnyParameters()
             ->willReturn('top');
         $this->requestMock->request = $this->parameterBagMock;
+
         $this->cubeServiceMock->expects($this->once())
-            ->method('getCube')
-            ->willReturn($cube);
-        $this->cubeRotationServiceMock->expects($this->once())
-            ->method('rotate')
-            ->withAnyParameters()
-            ->willReturn($rotatedCube);
-        $this->cubeServiceMock->expects($this->once())
-            ->method('saveCube')
-            ->with($rotatedCube);
+            ->method('rotateCube')
+            ->withAnyParameters();
 
         $result = $this->sideController->update($this->requestMock, 1);
     }

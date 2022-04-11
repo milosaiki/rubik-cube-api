@@ -3,27 +3,20 @@
 namespace App\Services;
 
 use App\Repository\CubeRepositoryInterface;
-use JetBrains\PhpStorm\ArrayShape;
+use App\Traits\RotateTrait;
 
 class CubeService implements CubeServiceInterface
 {
-    private CubeRepositoryInterface $cubeRepository;
 
-    public function __construct(CubeRepositoryInterface $cubeRepository)
+    private CubeRepositoryInterface $cubeRepository;
+    private RotationServiceInterface $rotationService;
+
+    public function __construct(CubeRepositoryInterface $cubeRepository, RotationServiceInterface $rotationService)
     {
         $this->cubeRepository = $cubeRepository;
+        $this->rotationService = $rotationService;
     }
 
-    #[ArrayShape(
-        [
-            'front' => "array",
-            'back' => "array",
-            'left' => "array",
-            'right' => "array",
-            'top' => "array",
-            'bottom' => "array"
-        ]
-    )]
     public function getCube(): array
     {
         return $this->cubeRepository->get();
@@ -32,5 +25,12 @@ class CubeService implements CubeServiceInterface
     public function saveCube(array $cube): void
     {
         $this->cubeRepository->save($cube);
+    }
+
+    public function rotateCube(string $direction, $row): void
+    {
+        $cube = $this->getCube();
+        $newCube = $this->rotationService->rotate($cube, $direction, $row);
+        $this->saveCube($newCube);
     }
 }
