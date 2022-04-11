@@ -35,7 +35,6 @@ class HorizontalRotationService implements RotationServiceInterface
         return $data;
     }
 
-
     public function rotate(array $cube, string $direction, string $rotationEl): array
     {
         $index = self::ROW_TO_INDEX_MAPPER[$rotationEl];
