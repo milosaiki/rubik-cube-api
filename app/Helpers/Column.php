@@ -2,9 +2,9 @@
 
 namespace App\Helpers;
 
-abstract class Column
+enum Column
 {
-    public const LEFT = 'left';
-    public const MIDDLE = 'middle';
-    public const RIGHT = 'right';
+    case left;
+    case middle;
+    case right;
 }

@@ -93,6 +93,6 @@ class HorizontalRotationService implements RotationServiceInterface
 
     private function isMiddleRowMoved(string $row): bool
     {
-        return Row::MIDDLE === $row;
+        return Row::middle->name === $row;
     }
 }

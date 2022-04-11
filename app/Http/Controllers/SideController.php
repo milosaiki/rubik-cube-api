@@ -25,7 +25,7 @@ class SideController extends Controller
             $request->request->get('row') :
             $request->request->get('column');
         $direction = $request->request->get('direction');
-        $this->cubeService->rotateCube($direction, $row);
+        $this->cubeService->rotateCube($direction, $row, $id);
 
         return response()->noContent();
     }

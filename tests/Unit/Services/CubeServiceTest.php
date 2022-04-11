@@ -67,7 +67,7 @@ class CubeServiceTest extends TestCase
     /**
      * @dataProvider rotateCubeDataProvider
      */
-    public function testRotateCube(array $cube, string $direction, string $row)
+    public function testRotateCube(array $cube, string $direction, string $row, int $id)
     {
         $rotated = [
             'front' => [
@@ -112,7 +112,7 @@ class CubeServiceTest extends TestCase
         $this->cubeRepositoryMock->expects($this->once())
             ->method('save');
 
-        $this->cubeService->rotateCube($direction, $row);
+        $this->cubeService->rotateCube($direction, $row, $id);
     }
 
     public function cubeDataProvider(): array
@@ -125,7 +125,7 @@ class CubeServiceTest extends TestCase
     public function rotateCubeDataProvider()
     {
         return [
-            [$this->getCube(), 'up', 'right']
+            [$this->getCube(), 'up', 'right', 1]
         ];
     }
 }

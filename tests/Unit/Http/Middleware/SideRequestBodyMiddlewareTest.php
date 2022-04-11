@@ -29,8 +29,12 @@ class SideRequestBodyMiddlewareTest extends \Tests\TestCase
     /**
      * @dataProvider badRequestDataProvider
      */
-    public function testHandleBadRequest(array $body): void
+    public function testHandleBadRequest(array $body, int $id): void
     {
+        $this->requestMock->expects($this->once())
+            ->method('route')
+            ->with('id')
+            ->willReturn($id);
         $this->requestMock->expects($this->once())
             ->method('getContent')
             ->willReturn(json_encode($body));
@@ -40,10 +44,28 @@ class SideRequestBodyMiddlewareTest extends \Tests\TestCase
     }
 
     /**
+     * @dataProvider badIdDataProvider
+     */
+    public function testBadRouteId(int $id): void
+    {
+        $this->requestMock->expects($this->once())
+            ->method('route')
+            ->with('id')
+            ->willReturn($id);
+        $response = $this->middleware->handle($this->requestMock, function () {});
+
+        $this->assertSame(400, $response->status());
+    }
+
+    /**
      * @dataProvider bodyDataProvider
      */
-    public function testHandle(array $body): void
+    public function testHandle(array $body, int $id): void
     {
+        $this->requestMock->expects($this->once())
+            ->method('route')
+            ->with('id')
+            ->willReturn($id);
         $this->requestMock->expects($this->once())
             ->method('getContent')
             ->willReturn(json_encode($body));
@@ -57,7 +79,8 @@ class SideRequestBodyMiddlewareTest extends \Tests\TestCase
                 [
                     'direction' => 'upp',
                     'column' => 'middle'
-                ]
+                ],
+                1
             ]
         ];
     }
@@ -69,8 +92,16 @@ class SideRequestBodyMiddlewareTest extends \Tests\TestCase
                 [
                     'direction' => 'up',
                     'column' => 'middle'
-                ]
+                ],
+                1
             ]
+        ];
+    }
+
+    public function badIdDataProvider(): array
+    {
+        return [
+            [10]
         ];
     }
 }

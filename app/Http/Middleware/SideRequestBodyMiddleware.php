@@ -26,6 +26,12 @@ class SideRequestBodyMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        $sideId = (int) $request->route('id');
+
+        if (!$this->isValidSideId($sideId)) {
+            return response('Bad request', 400)->header('Content-Type', 'text/json');
+        }
+
         $body = json_decode($request->getContent(), true);
 
         foreach ($body as $key => $value) {
@@ -45,5 +51,10 @@ class SideRequestBodyMiddleware
     private function isValueAllowed(string $key, string $value): bool
     {
         return in_array($value, self::ALLOWED_OPTIONS[$key]);
+    }
+
+    private function isValidSideId(int $id): bool
+    {
+        return (1 <= $id) && ($id <= 6);
     }
 }

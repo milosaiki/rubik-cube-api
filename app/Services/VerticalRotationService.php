@@ -98,6 +98,6 @@ class VerticalRotationService implements RotationServiceInterface
 
     private function isMiddleColumnMoved(string $rotationEl): bool
     {
-        return Column::MIDDLE === $rotationEl;
+        return Column::middle->name === $rotationEl;
     }
 }
