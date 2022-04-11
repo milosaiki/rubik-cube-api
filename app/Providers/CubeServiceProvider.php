@@ -25,7 +25,7 @@ class CubeServiceProvider extends ServiceProvider
         $this->app->singleton(RotationServiceInterface::class, function() {
             return new RotationService(
                 $this->app->get(HorizontalRotationService::class),
-                $this->app->get(RotationServiceInterface::class)
+                $this->app->get(VerticalRotationService::class)
             );
         });
 

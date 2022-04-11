@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "6ec64eb9-bbf7-4e1c-b9fd-2223d3730588",
+		"name": "Rubik's cube API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost/api/side/1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = [];",
+							"pm.test(\"Response body is valid\", function() {",
+							"  pm.response.to.have.status(204);",
+							"  if(!(Array.isArray(schema) && schema.length === 0)) {",
+							"    if (responseBody.trim() === '') {",
+							"        return false;",
+							"    }",
+							"    var data = JSON.parse(responseBody);",
+							"    var valid = tv4.validate(data, schema, false, true);",
+							"    if (valid !== true) {",
+							"        console.log(tv4.error);",
+							"        console.log(tv4.error.dataPath);",
+							"    }",
+							"    pm.expect(valid).to.be.true;",
+							"  }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"direction\": \"up\",\n    \"column\": \"left\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/side/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"side",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/api/cube",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"front\": {",
+							"            \"type\" : \"array\",",
+							"            \"items\": {",
+							"                \"type\": \"array\",",
+							"                \"items\": {",
+							"                    \"type\": \"string\"",
+							"                }",
+							"            }",
+							"        },",
+							"        \"right\": {",
+							"            \"type\" : \"array\",",
+							"            \"items\": {",
+							"                \"type\": \"array\",",
+							"                \"items\": {",
+							"                    \"type\": \"string\"",
+							"                }",
+							"            }",
+							"        },",
+							"        \"back\": {",
+							"            \"type\" : \"array\",",
+							"            \"items\": {",
+							"                \"type\": \"array\",",
+							"                \"items\": {",
+							"                    \"type\": \"string\"",
+							"                }",
+							"            }",
+							"        },",
+							"        \"left\": {",
+							"            \"type\" : \"array\",",
+							"            \"items\": {",
+							"                \"type\": \"array\",",
+							"                \"items\": {",
+							"                    \"type\": \"string\"",
+							"                }",
+							"            }",
+							"        },",
+							"        \"top\": {",
+							"            \"type\" : \"array\",",
+							"            \"items\": {",
+							"                \"type\": \"array\",",
+							"                \"items\": {",
+							"                    \"type\": \"string\"",
+							"                }",
+							"            }",
+							"        },",
+							"        \"bottom\": {",
+							"            \"type\" : \"array\",",
+							"            \"items\": {",
+							"                \"type\": \"array\",",
+							"                \"items\": {",
+							"                    \"type\": \"string\"",
+							"                }",
+							"            }",
+							"        }    ",
+							"    }",
+							"};",
+							"pm.test(\"Response body is valid\", function() {",
+							"  pm.response.to.have.status(200);",
+							"  if(!(Array.isArray(schema) && schema.length === 0)) {",
+							"    if (responseBody.trim() === '') {",
+							"        return false;",
+							"    }",
+							"    var data = JSON.parse(responseBody);",
+							"    var valid = tv4.validate(data, schema, false, true);",
+							"    if (valid !== true) {",
+							"        console.log(tv4.error);",
+							"        console.log(tv4.error.dataPath);",
+							"    }",
+							"    pm.expect(valid).to.be.true;",
+							"  }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/cube",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"cube"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
